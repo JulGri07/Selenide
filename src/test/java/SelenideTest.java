@@ -1,24 +1,21 @@
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
+import org.junit.Test;
 import org.openqa.selenium.By;
-import org.testng.annotations.Test;
 
 import static com.codeborne.selenide.Selenide.*;
 
 public class SelenideTest {
 
     @Test
-    public void openRegForm() {
+    public void testRegForm() throws InterruptedException {
         Configuration.browserSize = "1920x1080";
         open("https://www.facebook.com/");
         $(By.xpath(".//*[@data-testid='open-registration-form-button']")).should(Condition.enabled);
         $(By.xpath(".//*[@data-testid='open-registration-form-button']")).click();
         $(".registration_redesign").should(Condition.appear);
-    }
 
-    @Test(dependsOnMethods = "openRegForm")
-    public void checkRegFormElements() throws InterruptedException {
         $(By.xpath(".//*[@name='firstname']")).shouldBe(Condition.visible);
         $(By.xpath(".//*[@name='lastname']")).shouldBe(Condition.visible);
         $(By.xpath(".//*[@name='reg_email__']")).shouldBe(Condition.visible);
@@ -30,11 +27,6 @@ public class SelenideTest {
 
         $$(By.xpath(".//input[@name='sex']")).shouldHave(CollectionCondition.size(3));
 
-    }
-
-    @Test(dependsOnMethods = "checkRegFormElements")
-    public void fillRegistrationForm() throws InterruptedException {
-
         $(By.xpath(".//*[@name='firstname']")).setValue("User");
         $(By.xpath(".//*[@name='lastname']")).setValue("NewComer");
         $(By.xpath(".//*[@name='reg_email__']")).setValue("set.email@gmail.com");
@@ -45,18 +37,12 @@ public class SelenideTest {
 
         $$(By.xpath(".//input[@name='sex']")).get(0).click();
 
-        Thread.sleep(1000);
-    }
+        Thread.sleep(3000);
 
-    @Test(dependsOnMethods = "fillRegistrationForm")
-    public void checkEmailConfirmation(){
         $(By.xpath(".//*[@name='reg_email_confirmation__']")).shouldBe(Condition.visible);
         $(By.xpath(".//*[@name='reg_email_confirmation__']")).setValue("set.email@gmail.com");
         $(By.xpath(".//*[@name='reg_email_confirmation__']")).shouldHave(Condition.exactValue("set.email@gmail.com"));
-    }
 
-    @Test(dependsOnMethods = "fillRegistrationForm")
-    public void checkRegForm(){
         $(By.xpath(".//*[@name='firstname']")).shouldHave(Condition.exactValue("User"));
         $(By.xpath(".//*[@name='lastname']")).shouldHave(Condition.exactValue("NewComer"));
         $(By.xpath(".//*[@name='reg_email__']")).shouldHave(Condition.exactValue("set.email@gmail.com"));
@@ -66,11 +52,10 @@ public class SelenideTest {
         $(By.xpath(".//*[@id='year']")).shouldBe(Condition.value("1984"));
 
         $$(By.xpath(".//input[@name='sex']")).get(0).shouldBe(Condition.selected);
-    }
 
-    @Test(dependsOnMethods = "fillRegistrationForm")
-    public void checkRegButton(){
         $(By.xpath(".//button[@name='websubmit']")).shouldBe(Condition.enabled);
+
+        Thread.sleep(3000);
     }
 
 
