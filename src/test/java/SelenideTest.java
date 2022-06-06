@@ -1,6 +1,7 @@
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
@@ -8,13 +9,26 @@ import static com.codeborne.selenide.Selenide.*;
 
 public class SelenideTest {
 
-    @Test
-    public void testRegForm() throws InterruptedException {
+    @Before
+    public void startUp() {
         Configuration.browserSize = "1920x1080";
         open("https://www.facebook.com/");
-        $(By.xpath(".//*[@data-testid='open-registration-form-button']")).should(Condition.enabled);
+    }
+
+    private void openRegForm() {
         $(By.xpath(".//*[@data-testid='open-registration-form-button']")).click();
+    }
+
+    @Test
+    public void testStartPage() {
+        $(By.xpath(".//*[@data-testid='open-registration-form-button']")).should(Condition.enabled);
+        openRegForm();
         $(".registration_redesign").should(Condition.appear);
+    }
+
+    @Test
+    public void testRegFormPage() throws InterruptedException {
+        openRegForm();
 
         $(By.xpath(".//*[@name='firstname']")).shouldBe(Condition.visible);
         $(By.xpath(".//*[@name='lastname']")).shouldBe(Condition.visible);
