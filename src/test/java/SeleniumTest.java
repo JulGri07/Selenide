@@ -1,21 +1,17 @@
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 public class SeleniumTest {
 
     private WebDriver driver;
-    private WebDriverWait wait;
 
     private By first_name = By.xpath(".//*[@name='firstname']");
     private By last_name = By.xpath(".//*[@name='lastname']");
@@ -49,7 +45,7 @@ public class SeleniumTest {
     public void startup(){
         System.setProperty("webdriver.chrome.driver", "C:\\Documents and Settings\\User\\IdeaProjects\\SeleniumWdTestNg\\src\\main\\resources\\chromedriver.exe");
         driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     @Test
@@ -57,7 +53,6 @@ public class SeleniumTest {
         driver.get("https://www.facebook.com/");
         Assert.assertTrue(driver.findElement(reg_button).isEnabled());
         driver.findElement(reg_button).click();
-        wait.until(ExpectedConditions.presenceOfElementLocated(submit_button));
         Assert.assertTrue(driver.findElement(reg_form).isDisplayed());
     }
 
